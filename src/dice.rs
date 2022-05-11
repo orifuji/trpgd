@@ -2,25 +2,25 @@ use rand::{self, Rng};
 use std::ops::Range;
 
 pub fn roll(number_of_dice: usize, max: usize, min: usize) -> usize {
-    let vec: Vec<u64> = Vec::with_capacity(number_of_dice);
-    let random_values = vec.iter().map(|_| self::random(min, max)).collect();
-    return self::sum(random_values);
+    let mut vec: Vec<usize> = Vec::with_capacity(number_of_dice);
+    vec.resize(number_of_dice, 0);
+    return self::sum(vec, min, max);
 }
 
-fn random(min: usize, max: usize) -> usize {
-    let mut rng = rand::thread_rng();
-    let range = Range {
-        start: min,
-        end: max,
-    };
-    return rng.gen_range(range);
-}
-
-fn sum(v: Vec<usize>) -> usize {
+// FIXME: 責務過多。乱数生成を切り出したい
+fn sum(v: Vec<usize>, min: usize, max: usize) -> usize {
     let mut sum = 0;
-    for &i in &v {
-        println!("{}", sum.to_string());
-        sum += i;
+    let mut rng = rand::thread_rng();
+
+    for _ in &v {
+        let range = Range {
+            start: min,
+            end: max,
+        };
+        let random = rng.gen_range(range);
+        println!("dice: {:?}", random);
+        sum += random;
+        println!("sum: {:?}", sum);
     }
     sum
 }
